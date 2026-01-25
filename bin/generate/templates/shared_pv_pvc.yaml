@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: ${APPLICATION_NAMESPACE}-data-shared-efs-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  csi:
+    driver: efs.csi.aws.com
+    volumeHandle: ${DATA_EFS_ID}::${EFS_PERIMETER_ACCESS_POINT_ID}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ${APPLICATION_NAMESPACE}-data-shared-efs-pvc
+  namespace: ${APPLICATION_NAMESPACE}
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+  volumeName: ${APPLICATION_NAMESPACE}-data-shared-efs-pv
