@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ${APPLICATION_NAME}-splunk-efs-pvc
+  namespace: ${APPLICATION_NAMESPACE}
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+  volumeName: ${APPLICATION_NAMESPACE}-splunk-efs-pv
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ${APPLICATION_NAMESPACE}-data-efs-pvc
+  namespace: ${APPLICATION_NAMESPACE}
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+  volumeName: ${APPLICATION_NAMESPACE}-data-efs-pv

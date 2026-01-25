@@ -1,0 +1,55 @@
+name: Generate Application OCI
+
+on:
+  workflow_dispatch:
+  # schedule:
+  #   - cron: '0 0 * * *'
+
+
+permissions:
+  id-token: write
+  contents: read
+
+
+jobs:
+  call-reusable-workflow-ci-dev:
+    uses: a14T2n6g2l59Hgnsmb1Sc4L6CCY7U9XI2cmTor8/cloudhandson-eks-reusable-workflow/.github/workflows/reusable-workflow-applioci.yaml@workflow_test
+    with:
+      CLUSTER_NAME: mpft
+      CLUSTER_ENV: dev
+    secrets:
+      AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
+      GIT_TOKEN_PERSONAL: ${{ secrets.GIT_TOKEN_PERSONAL }}
+
+
+  call-reusable-workflow-ci-qa:
+    needs: call-reusable-workflow-ci-dev
+    uses: a14T2n6g2l59Hgnsmb1Sc4L6CCY7U9XI2cmTor8/cloudhandson-eks-reusable-workflow//.github/workflows/reusable-workflow-applioci.yaml@workflow_test
+    with:
+      CLUSTER_NAME: ${{ secrets.CLUSTER_NAME }}
+      CLUSTER_ENV: qa
+    secrets:
+      AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
+      GIT_TOKEN_PERSONAL: ${{ secrets.GIT_TOKEN_PERSONAL }}
+
+
+  call-reusable-workflow-ci-preprod:
+    needs: call-reusable-workflow-ci-qa
+    uses: a14T2n6g2l59Hgnsmb1Sc4L6CCY7U9XI2cmTor8/cloudhandson-eks-reusable-workflow/.github/workflows/reusable-workflow-applioci.yaml@workflow_test
+    with:
+      CLUSTER_NAME: ${{ secrets.CLUSTER_NAME }}
+      CLUSTER_ENV: preprod
+    secrets:
+      AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
+      GIT_TOKEN_PERSONAL: ${{ secrets.GIT_TOKEN_PERSONAL }}
+
+
+  call-reusable-workflow-ci-prod:
+    needs: call-reusable-workflow-ci-preprod
+    uses: a14T2n6g2l59Hgnsmb1Sc4L6CCY7U9XI2cmTor8/cloudhandson-eks-reusable-workflow/.github/workflows/reusable-workflow-applioci.yaml@workflow_test
+    with:
+      CLUSTER_NAME: ${{ secrets.CLUSTER_NAME }}
+      CLUSTER_ENV: prod
+    secrets:
+      AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
+      GIT_TOKEN_PERSONAL: ${{ secrets.GIT_TOKEN_PERSONAL }}

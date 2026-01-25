@@ -1,0 +1,8 @@
+spec:
+  dependsOn:
+    - name: aws-lb-controller
+    - name: cert-manager
+    - name: external-secrets
+#    - name: istio
+#    - name: karpenter
+#    - name: twistlock-defender
