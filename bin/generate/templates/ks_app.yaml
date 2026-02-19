@@ -1,6 +1,6 @@
 spec:
   dependsOn:
-    - name: aws-lb-controller
+#    - name: aws-lb-controller
     - name: cert-manager
     - name: external-secrets
 #    - name: istio
